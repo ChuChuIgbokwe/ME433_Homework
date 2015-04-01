@@ -41,9 +41,9 @@ These are the available DEVCFG bits for the PIC32MX250F128B are listed in the do
 // DEVCFG2 - get the CPU clock to 40MHz
 #pragma config FPLLIDIV = x // divide input clock to be in range 4-5MHz
 #pragma config FPLLMUL = x // multiply clock after FPLLIDIV
-#pragma config UPLLIDIV = x // divide clock after FPLLMUL
+#pragma config FPLLODIV = x // divide clock after FPLLMUL to get 40MHz
+#pragma config UPLLIDIV = x // divide clock to get 48MHz for USB
 #pragma config UPLLEN = x // USB clock on
-#pragma config FPLLODIV = x // divide clock by 1 to output on pin
 
 // DEVCFG3
 #pragma config USERID = 0 // some 16bit userid

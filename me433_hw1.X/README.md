@@ -17,6 +17,7 @@ Write code to:
 * Set LED2 to output compare at 1kHz
 * Set USER to digital input
 * Read the analog input
+
 Demonstrate:
 
 * Toggle LED1 every 1/2 second

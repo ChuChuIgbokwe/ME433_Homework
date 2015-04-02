@@ -24,3 +24,5 @@ Demonstrate:
 * When USER is pushed, toggle LED1 as fast as possible
 * Set LED2 brightness proportional to the potentiometer voltage
 * Set LED2 frequency to 1kHz using Timer 2 and verify with the nScope or Tek scope
+
+![imag0187](https://cloud.githubusercontent.com/assets/4311090/6957602/02a56534-d8c3-11e4-97de-95d7bc1960e2.jpg)

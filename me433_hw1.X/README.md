@@ -25,4 +25,9 @@ Demonstrate:
 * Set LED2 brightness proportional to the potentiometer voltage
 * Set LED2 frequency to 1kHz using Timer 2 and verify with the nScope or Tek scope
 
+<h3> Circuit Snapshot
 ![imag0187](https://cloud.githubusercontent.com/assets/4311090/6957602/02a56534-d8c3-11e4-97de-95d7bc1960e2.jpg)
+
+<h3> 1KHz Waveform
+![1khz_me433_hwk1](https://cloud.githubusercontent.com/assets/4311090/6958041/73dfe1fe-d8cb-11e4-977e-c5958974b354.png)
+

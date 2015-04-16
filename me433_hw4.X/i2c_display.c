@@ -220,4 +220,3 @@ void display_main(char *message, int row_cur, int col_cur){
 
 
 
-

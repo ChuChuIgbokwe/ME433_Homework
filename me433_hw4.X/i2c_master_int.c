@@ -1,4 +1,3 @@
-
 #include "i2c_master_int.h"
 
 #include<xc.h>                      // processor SFR definitions
@@ -32,18 +31,18 @@ void __ISR(_I2C_1_VECTOR, IPL1SOFT) I2C1SlaveInterrupt(void) {
         state = ACK;                           // skip directly to reading
         I2C1TRN = (address << 1) & 1;
       }
-      
+
       break;
     case WRITE:                                 // a write has finished
       if(I2C1STATbits.ACKSTAT) {                // did not receive a nack from the slave, this is an error
         state = ERROR;
-      } else {        
+      } else {
         if(write_index < n_write) {             // still more data to write
           I2C1TRN = to_write[write_index];      // write the data
           ++write_index;
         } else {                                // done writing data, time to read or stop
           if(n_read > 0) {                      // we want to read so issue a restart
-            state = RESTART;         
+            state = RESTART;
             I2C1CONbits.RSEN = 1;               // send the restart to begin the read
           }
           else {                                // no data to read, issue a stop
@@ -100,7 +99,8 @@ void i2c_master_setup() {
   IEC1bits.I2C1MIE = 1;            // master interrupt is enabled
   IFS1bits.I2C1MIF = 0;            // clear the interrupt flag
   I2C1CONbits.ON = 1;                 // turn on the I2C2 module
-  
+
+   
   if(ie & 1) {
     __builtin_enable_interrupts();
   }
@@ -121,5 +121,3 @@ int i2c_write_read(unsigned int addr, const buffer_t write, unsigned int wlen, c
 int i2c_write_byte(unsigned int addr, unsigned char byte) {
   return i2c_write_read(addr,&byte,1,NULL,0);
 }
-
-

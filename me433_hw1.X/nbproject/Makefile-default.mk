@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=hwk1_main.c
+SOURCEFILES_QUOTED_IF_SPACED=hw1_main.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/hwk1_main.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/hwk1_main.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/hw1_main.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/hw1_main.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/hwk1_main.o
+OBJECTFILES=${OBJECTDIR}/hw1_main.o
 
 # Source Files
-SOURCEFILES=hwk1_main.c
+SOURCEFILES=hw1_main.c
 
 
 CFLAGS=
@@ -94,18 +94,18 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/hwk1_main.o: hwk1_main.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/hw1_main.o: hw1_main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/hwk1_main.o.d 
-	@${RM} ${OBJECTDIR}/hwk1_main.o 
-	@${FIXDEPS} "${OBJECTDIR}/hwk1_main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/hwk1_main.o.d" -o ${OBJECTDIR}/hwk1_main.o hwk1_main.c   
+	@${RM} ${OBJECTDIR}/hw1_main.o.d 
+	@${RM} ${OBJECTDIR}/hw1_main.o 
+	@${FIXDEPS} "${OBJECTDIR}/hw1_main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/hw1_main.o.d" -o ${OBJECTDIR}/hw1_main.o hw1_main.c   
 	
 else
-${OBJECTDIR}/hwk1_main.o: hwk1_main.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/hw1_main.o: hw1_main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/hwk1_main.o.d 
-	@${RM} ${OBJECTDIR}/hwk1_main.o 
-	@${FIXDEPS} "${OBJECTDIR}/hwk1_main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/hwk1_main.o.d" -o ${OBJECTDIR}/hwk1_main.o hwk1_main.c   
+	@${RM} ${OBJECTDIR}/hw1_main.o.d 
+	@${RM} ${OBJECTDIR}/hw1_main.o 
+	@${FIXDEPS} "${OBJECTDIR}/hw1_main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/hw1_main.o.d" -o ${OBJECTDIR}/hw1_main.o hw1_main.c   
 	
 endif
 

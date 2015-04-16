@@ -1,3 +1,10 @@
+/* 
+ * File:   accel.h
+ * Author: chu-chu
+ *
+ * Created on April 16, 2015, 12:45 PM
+ */
+
 #ifndef ACCEL__H__
 #define ACCEL__H__
 // Basic interface with an LSM303D accelerometer/compass.

@@ -11,6 +11,7 @@
 #include <xc.h> // processor SFR definitions
 #include <sys/attribs.h> // __ISR macro
 
+
 // DEVCFGs here
 
 
@@ -119,15 +120,13 @@ int main() {
     
     T2CONbits.TCKPS = 0;     // Timer3 prescaler N=2 (1:2)
 	PR2 = 39999;              // period = (PR2+1) * N * 12.5 ns = 100 us, 20 kHz 9999
-	TMR2 = 0;                // initial TMR2 count is 0 2
+	TMR2 = 0;                // initial TMR2 count is 0 
 	OC1CONbits.OCM = 0b110;  // PWM mode without fault pin; other OC1CON bits are defaults
 //	OC1CONbits.OCTSEL = 1;   // set Output compare timer select bit to use timer 3 as clock source 
 	OC1RS = 0;            // duty cycle = OC1RS/(PR2+1) = 75% 5000
 	OC1R = 0;             // initialize before turning OC1 on; afterward it is read-only 5000
 	T2CONbits.ON = 1;        // turn on Timer2
   	OC1CONbits.ON = 1;       // turn on OC1
-
- //Use the core timer to double check your CPU clock settings
 
 while (1) {
     _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock

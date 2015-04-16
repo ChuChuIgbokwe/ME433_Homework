@@ -1,3 +1,10 @@
+/* 
+ * File:   i2c_display.h
+ * Author: chu-chu
+ *
+ * Created on April 16, 2015, 12:30 PM
+ */
+
 #ifndef I2C_DISPLAY_H__
 #define I2C_DISPLAY_H__
 // bare-bones driver for interfacing with the SSD1306 OLED display via I2C

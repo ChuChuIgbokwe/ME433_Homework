@@ -1,4 +1,3 @@
-
 #include "i2c_master_int.h"
 
 #include<xc.h>                      // processor SFR definitions
@@ -121,5 +120,6 @@ int i2c_write_read(unsigned int addr, const buffer_t write, unsigned int wlen, c
 int i2c_write_byte(unsigned int addr, unsigned char byte) {
   return i2c_write_read(addr,&byte,1,NULL,0);
 }
+
 
 

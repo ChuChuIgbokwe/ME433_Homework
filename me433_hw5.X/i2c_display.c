@@ -1,3 +1,4 @@
+
 #include "i2c_master_int.h"
 #include "i2c_display.h"
 #include <stdlib.h>
@@ -210,7 +211,6 @@ void display_main(char *message, int row_cur, int col_cur){
     };
     display_draw(); //draws the image
 }
-
 
 
 

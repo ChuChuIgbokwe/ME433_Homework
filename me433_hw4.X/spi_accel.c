@@ -49,10 +49,10 @@ void acc_setup() {
   CS = 1;
 
   // select a pin for SDI1
-  SDI1Rbits.SDI1R = 0bxxxx;
+  SDI1Rbits.SDI1R = 0b0000;//RPA1 or pin 3 to SDO
 
   // select a pin for SD01
-  RPx#Rbits.RPx#R = 0bxxxx;
+  RPB2Rbits.RPB2R = 0b0011;//RPB2 or pin 6 to SDA
 
   // Setup the master Master - SPI1
   // we manually control SS as a digital output 
@@ -77,5 +77,3 @@ void acc_setup() {
   // enable continuous reading of the magnetometer
   acc_write_register(CTRL7, 0x0); 
 }
-
-

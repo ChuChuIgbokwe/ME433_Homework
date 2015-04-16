@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <xc.h> // processor SFR definitions
 #include <sys/attribs.h> // __ISR macro
+#include "accel.h"
 
 // DEVCFGs here
 

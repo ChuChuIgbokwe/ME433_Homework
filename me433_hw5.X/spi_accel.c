@@ -7,7 +7,7 @@
 // SCK1 (B14)       -> SCL
 // some digital pin -> CS
 
-#define CS LATxbits.LATx# // replace x with some digital pin
+#define CS LATBbits.LATB4 // replace x with some digital pin
 
 // send a byte via spi and return the response
 unsigned char spi_io(unsigned char o) {
@@ -45,14 +45,20 @@ void acc_write_register(unsigned char reg, unsigned char data) {
 
 
 void acc_setup() {
-  TRISxbits.TRISx# = 0; // set CS to output and digital if necessary
+
+  // turn off AN10 to be able to use SCK1 pin
+  ANSELBbits.ANSB14 = 0;     // 0 for digital, 1 for analog // set up USER pin as input. 0 for digital
+  TRISBbits.TRISB4 = 0; // set CS to output and digital if necessary
   CS = 1;
 
   // select a pin for SDI1
-  SDI1Rbits.SDI1R = 0b0000;//RPA1 or pin 3 to SDO
+  //SDI1 is a peripheral pin select so you have to choose it yourself
+  ANSELAbits.ANSA1 = 0;      // 0 for digital, 1 for analog might be ANSELBbits.ANSB1 = 0;      
+  SDI1Rbits.SDI1R = 0b0000;//RPA1/RA1 or pin 3 to SDO
 
   // select a pin for SD01
-  RPB2Rbits.RPB2R = 0b0011;//RPB2 or pin 6 to SDA
+  ANSELBbits.ANSB2 = 0;      // 0 for digital, 1 for analog
+  RPB2Rbits.RPB2R = 0b0011;//RPB2 or pin 6 to SDA. setting RPB2 to 0b011 sets it to the SDO1 peripheral section
 
   // Setup the master Master - SPI1
   // we manually control SS as a digital output 
@@ -75,5 +81,12 @@ void acc_setup() {
   acc_write_register(CTRL5, 0xF0); 
 
   // enable continuous reading of the magnetometer
-  acc_write_register(CTRL7, 0x0); 
+  acc_write_register(CTRL7, 0x0);
+  
+  //set accelerometer sensitivity to +- 2g
+  // CTRL2 register: AFS default value: 0
+  // address: 0x21 or 0100001
+  // register bits: ABW1, ABW0, AFS2, AFS1, AFS0, 0, AST, SIM (default 00000000)
+  // acceleration +/- 2g -> AFS2=0, AFS1=0, AFS0=0
+  acc_write_register(CTRL2, 0x00);
 }

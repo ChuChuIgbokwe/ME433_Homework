@@ -174,49 +174,40 @@ static const char ASCII[96][5] = {
 ,{0x00, 0x06, 0x09, 0x09, 0x06} // 7f ?
 }; // end char ASCII[96][5]
 
-int ascii_row(char ch){     //finds the row of the character in the ascii table above
-    int ch_row = ch - 0x20;
-}
 
 
-void display_main(char *message, int row_cur, int col_cur){
+void display_ascii(char *string, int row, int col){
     int i = 0, j, k;
-    while(message[i]){      //reads through characters in message
-        int ch_row = ascii_row(message[i]);     //gets row of character in ascii table
-        //checking if pixel is out of bounds
-        if(col_cur > 125){
-            col_cur = 0;
-            row_cur = row_cur + 8;
+    
+    while(string[i]){//reads through characters in message
+         //gets row of character in ascii table
+        int string_inbound = string[i] - 0x20; /* The characters in ASCII start at 0x20 
+        * in the ascii table, so if you know the character you want to display, 
+        * its location in ASCII is its decimal value minus 0x20.*/
+        
+        //check if pixel is out of bounds
+        if(col > 125){
+            col = 0;
+            row = row + 8;
         }
-        if(row_cur > 56){
-            row_cur = 0;
-            col_cur = 0;
+        if(row > 56){
+            row = 0;
+            col = 0;
         }
-        int row = row_cur;
-        int col = col_cur;
 
-        //loops through columns and rows of each charcter pixel values
+        //loops through columns and rows of each character pixel values
         for(j = 0; j < 5; j++){
+            int mask = 1;
             for(k = 0; k < 8; k++){
-                int ch_hex = ASCII[ch_row][j];      //gets the pixel values from each column
-                int ch_bin = (ch_hex & (1 << k)) >> k; //bitmask the value
-                row = row_cur + k;
-                col = col_cur + j;
-                display_pixel_set(row, col, ch_bin); //set the pixel value
+                int ch_hex = ASCII[string_inbound][j];      //gets the pixel values from each column
+                //int ch_bin = (ch_hex & (1 << k)) >> k; //bitmask the value
+                int ch_bin = ch_hex & mask; //bitmask the value
+                display_pixel_set(row + k, col + j, ch_bin); //set the pixel value
+                mask<<=1;
             };
         };
         i++;
-        col_cur = col_cur + 5;
+        col = col + 5;
     };
     display_draw(); //draws the image
 }
-
-
-
-
-
-
-
-
-
-

@@ -12,8 +12,10 @@
 
                         // register addresses
 #define CTRL1 0x20      // control register 1
+#define CTRL2 0x21      // control register 2
 #define CTRL5 0x24      // control register 5
 #define CTRL7 0x26      // control register 7
+
 
 #define OUT_X_L_A 0x28  // LSB of x axis acceleration register.
                         // all acceleration registers are contiguous, and this is the lowest address

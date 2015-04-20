@@ -2,6 +2,7 @@
 
 #include<xc.h> // processor SFR definitions
 #include<sys/attribs.h> // __ISR macro
+#include"accel.h"
 
 // DEVCFGs here
 
@@ -102,13 +103,29 @@ int main() {
 
         //New part for printing message to screen
         display_init();             //initialize display
-        display_clear();            //clear scren
-        char message[20];
-        int num = 1337;
-        sprintf(message,"Hello world %d!",num);
-        display_main(message, 15, 30);      //writes message to screen
-
+        display_clear();            //clear screen
+        acc_setup();
+        // initialize variables to store the acceleration, magnetometer, and temperature data
+        short accels[3]; // accelerations for the 3 axes
+        short mags[3]; // magnetometer readings for the 3 axes
+        short temp;
+        
 	while (1) {
+        
+        
+            //To read the values from the chip, call:
+            // read the accelerometer from all three axes
+            // the accelerometer and the pic32 are both little endian by default (the lowest address has the LSB)
+            // the accelerations are 16-bit twos compliment numbers, the same as a short
+            acc_read_register(OUT_X_L_A, (unsigned char *) accels, 6);
+            
+            // need to read all 6 bytes in one transaction to get an update.
+            acc_read_register(OUT_X_L_M, (unsigned char *) mags, 6);
+
+            // read the temperature data. Its a right justified 12 bit two's compliment number
+            acc_read_register(TEMP_OUT_L, (unsigned char *) &temp, 2);
+
+
             // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
             //Use the core timer to double check your CPU clock settings
             _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock

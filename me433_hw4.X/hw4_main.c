@@ -101,11 +101,11 @@ int main() {
 
         //New part for printing message to screen
         display_init();             //initialize display
-        display_clear();            //clear scren
+        display_clear();            //clear screen
         char message[20];
         int num = 1337;
-        sprintf(message,"Hello world %d!",num);
-        display_main(message, 15, 30);      //writes message to screen
+        sprintf(message,"Hello robin %d!",num);
+        display_ascii(message, 15, 30);      //writes message to screen
 
 	while (1) {
             // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
@@ -114,11 +114,9 @@ int main() {
             LATBINV = 0x0080; // invert a pin
 
             // wait for half a second, setting LED brightness to pot angle while waiting
-
-
             while (_CP0_GET_COUNT() < 10000000) {
                 int val = readADC();
-                OC1RS = (val * PR2)/1024;
+                OC1RS = val * PR2/1024;
 
                 if (PORTBbits.RB13 == 1) {
                     // nothing

@@ -24,14 +24,14 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=test.X
+PROJECTNAME=blinky_leds.X
 
 # Active Configuration
-DEFAULTCONF=default
+DEFAULTCONF=pic32mx_eth_sk
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=default 
+ALLCONFS=pic32mx_eth_sk pic32mz_ec_sk 
 
 
 # build
@@ -45,13 +45,15 @@ ALLCONFS=default
 
 # clobber
 .clobber-impl: .clobber-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=pic32mx_eth_sk clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=pic32mz_ec_sk clean
 
 
 
 # all
 .all-impl: .all-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=pic32mx_eth_sk build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=pic32mz_ec_sk build
 
 
 

@@ -101,11 +101,16 @@ int main() {
         AD1CHSbits.CH0SA = 0;
         AD1CON1bits.ADON = 1;
 
+//        // Turn on I2C_1 and initialize display
+//        I2C1CONbits.ON = 1;
         //New part for printing message to screen
         display_init();             //initialize display
         display_clear();            //clear screen
         char message[20];
         char message1[20];
+//        sprintf(message,"batman");
+//        display_ascii(message,10,10);
+        
         acc_setup();
         // initialize variables to store the acceleration, magnetometer, and temperature data
         short accels[3]; // accelerations for the 3 axes
@@ -113,13 +118,36 @@ int main() {
         short temp;
         
 	while (1) {
-            //To read the values from the chip, call:
+           
+            // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
+            //Use the core timer to double check your CPU clock settings
+            _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock
+            LATBINV = 0x0080; // invert a pin
+
+            // wait for half a second, setting LED brightness to pot angle while waiting
+
+
+            while (_CP0_GET_COUNT() < 10000000) {
+            
+             
+                int val = readADC();
+                OC1RS = (val * PR2)/1024;
+
+                if (PORTBbits.RB13 == 1) {
+                    // nothing
+                }
+                else {
+                    LATBINV = 0x0080;
+                }
+                     //To read the values from the chip, call:
             // read the accelerometer from all three axes
             // the accelerometer and the pic32 are both little endian by default (the lowest address has the LSB)
             // the accelerations are 16-bit twos compliment numbers, the same as a short
             acc_read_register(OUT_X_L_A, (unsigned char *) accels, 6);
-            sprintf(message1, "accel x: %d", accels[0]);     //~ takes the two's compliment
-            display_ascii(message1, 10, 10);
+//            sprintf(message1, "accel x: %d", accels[0]);     //~ takes the two's compliment
+//            display_ascii(message1, 10, 10);
+//            display_clear();
+            
             // need to read all 6 bytes in one transaction to get an update.
             acc_read_register(OUT_X_L_M, (unsigned char *) mags, 6);
 
@@ -131,24 +159,11 @@ int main() {
             
 //            sprintf(message,"x : %d,y : %d,z : %d",accels[0],accels[1],accels[2]);
 //            display_ascii(message, 5, 5);      //writes message to screen
-            // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
-            //Use the core timer to double check your CPU clock settings
-            _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock
-            LATBINV = 0x0080; // invert a pin
-
-            // wait for half a second, setting LED brightness to pot angle while waiting
-
-
-            while (_CP0_GET_COUNT() < 10000000) {
-                int val = readADC();
-                OC1RS = (val * PR2)/1024;
-
-                if (PORTBbits.RB13 == 1) {
-                    // nothing
-                }
-                else {
-                    LATBINV = 0x0080;
-                }
+//            display_clear();
+            
+//             display_arrow(accels[0], accels[1]);        // display_arrow will draw line on screen
+//             display_clear();
+            accel_draw_axis(accels[0], accels[1]);
             
             }
         }

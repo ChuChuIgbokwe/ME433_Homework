@@ -28,4 +28,8 @@ int display_pixel_get(int row, int col);  // get the pixel at the given row and 
 
 void display_ascii(char *string, int row, int col); //writes characters to the screen
 
+void display_arrow(int x_val, int y_val);//displays arrows on screen
+
+void accel_draw_axis(short x, short y);//displays arrows on screen
+
 #endif

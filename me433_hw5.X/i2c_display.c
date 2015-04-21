@@ -9,6 +9,7 @@
 #define DISPLAY_ADDR 0x3C
 
 #define SIZE WIDTH*HEIGHT/8 //display size, in bytes
+#define SCALE 30/32000 //scaler for length of arrow
 
 #define ROW_0 15                // starting row
 #define COLUMN_0 30             // starting column
@@ -198,11 +199,12 @@ void display_ascii(char *string, int row, int col){
             row = 0;
             col = 0;
         }
+
         //loops through columns and rows of each character pixel values
         for(j = 0; j < 5; j++){
             int mask = 1;
             for(k = 0; k < 8; k++){
-                int ch_hex = ASCII[96][j];      //gets the pixel values from each column
+                int ch_hex = ASCII[string_inbound][j];      //gets the pixel values from each column
                 //int ch_bin = (ch_hex & (1 << k)) >> k; //bitmask the value
                 int ch_bin = ch_hex & mask; //bitmask the value
                 display_pixel_set(row + k, col + j, ch_bin); //set the pixel value
@@ -215,9 +217,133 @@ void display_ascii(char *string, int row, int col){
     display_draw(); //draws the image
 }
 
+void display_arrow(int x_val, int y_val){
+    display_clear();
+    //starts at center of board
+    int row = 32;
+    int col = 64;
 
+    // scales the values to draw a line proportional to the values from accelerometer and still be able to fit on the screen
+    int x_draw, y_draw;
+    x_draw = x_val*SCALE;
+    y_draw = y_val*SCALE;
 
+    //determines direction to draw the line - up, down, left, or right
+    int x_direction = 1, y_direction = 1;
+    if (x_draw > 0){
+        x_direction = -1;
+    };
+    if (y_draw > 0){
+        y_direction = -1;
+    };
 
+    //take absolute value so that value will get smaller in while loop
+    x_draw = abs(x_draw);
+    y_draw = abs(y_draw);
+
+    //will draw a line of pixels at a time, to a length proportional to the value from accelerometer
+    int w;
+    while(x_draw > 0){
+        row = row + 1*x_direction;          //multiply by x_direction for line to be in the right direction
+        for(w = 0; w < 5; w++){              // draws a thin line 5 pixels wide
+           display_pixel_set(row, col+w, 1); //set the pixel value
+        };
+        x_draw = x_draw - 1;
+    }
+
+    //set the row back to the center of screen
+    row = 32;
+    int h;
+    while(y_draw > 0){
+        col = col + 1*y_direction;
+        for(h = 0; h < 5; h++){
+           display_pixel_set(row + h, col, 1); //set the pixel value
+        };
+        y_draw = y_draw - 1;
+    }
+
+    display_draw(); //draws the image
+}
+
+#define DISPLAY_ALLIGNER 0
+#define DISPLAY_MAX_X 128
+#define DISPLAY_MAX_Y 64
+#define DISPLAY_CENTER_X DISPLAY_MAX_X/2
+#define DISPLAY_CENTER_Y DISPLAY_MAX_Y/2
+#define ACCEL_AXIS_SCALE 30/3200
+
+void accel_draw_axis(short x, short y)
+{
+    display_clear();
+
+    short x_draw, y_draw;
+
+    x_draw = x * ACCEL_AXIS_SCALE;
+    y_draw = y * ACCEL_AXIS_SCALE;
+
+    display_pixel_set(DISPLAY_CENTER_Y, DISPLAY_CENTER_X,1);
+
+    short i;
+    int isXNeg=0,isYNeg=0;
+
+    if(x_draw < 0)
+    {
+        isXNeg = 1;
+        x_draw *= -1;
+    }
+    if(x_draw > DISPLAY_CENTER_X)
+            x_draw = DISPLAY_CENTER_X;
+
+    if(y_draw < 0)
+    {
+        isYNeg = 1;
+        y_draw *= -1;
+    }
+    if(y_draw > DISPLAY_CENTER_Y)
+            y_draw = DISPLAY_CENTER_Y;
+    
+    for(i = 1; i <= x_draw; i++)
+    {
+        if(isXNeg)
+        {
+            display_pixel_set(DISPLAY_CENTER_Y - 2,DISPLAY_CENTER_X - i,1);
+            display_pixel_set(DISPLAY_CENTER_Y - 1,DISPLAY_CENTER_X - i,1);
+            display_pixel_set(DISPLAY_CENTER_Y,DISPLAY_CENTER_X - i,1);
+            display_pixel_set(DISPLAY_CENTER_Y + 1,DISPLAY_CENTER_X - i,1);
+            display_pixel_set(DISPLAY_CENTER_Y + 2,DISPLAY_CENTER_X - i,1);
+        }
+        else
+        {
+            display_pixel_set(DISPLAY_CENTER_Y - 2,DISPLAY_CENTER_X + i,1);
+            display_pixel_set(DISPLAY_CENTER_Y - 1,DISPLAY_CENTER_X + i,1);
+            display_pixel_set(DISPLAY_CENTER_Y,DISPLAY_CENTER_X + i,1);
+            display_pixel_set(DISPLAY_CENTER_Y + 1,DISPLAY_CENTER_X + i,1);
+            display_pixel_set(DISPLAY_CENTER_Y + 2,DISPLAY_CENTER_X + i,1);
+        }
+    }
+
+    for(i = 1; i <= y_draw; i++)
+    {
+        if(isYNeg)
+        {
+            display_pixel_set(DISPLAY_CENTER_Y - i,DISPLAY_CENTER_X - 2,1);
+            display_pixel_set(DISPLAY_CENTER_Y - i,DISPLAY_CENTER_X - 1,1);
+            display_pixel_set(DISPLAY_CENTER_Y - i,DISPLAY_CENTER_X,1);
+            display_pixel_set(DISPLAY_CENTER_Y - i,DISPLAY_CENTER_X + 1,1);
+            display_pixel_set(DISPLAY_CENTER_Y - i,DISPLAY_CENTER_X + 2,1);
+        }
+        else
+        {
+            display_pixel_set(DISPLAY_CENTER_Y + i,DISPLAY_CENTER_X - 2,1);
+            display_pixel_set(DISPLAY_CENTER_Y + i,DISPLAY_CENTER_X - 1,1);
+            display_pixel_set(DISPLAY_CENTER_Y + i,DISPLAY_CENTER_X,1);
+            display_pixel_set(DISPLAY_CENTER_Y + i,DISPLAY_CENTER_X + 1,1);
+            display_pixel_set(DISPLAY_CENTER_Y + i,DISPLAY_CENTER_X + 2,1);
+        }
+    }
+
+    display_draw();
+}
 
 
 

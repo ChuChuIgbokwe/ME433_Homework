@@ -104,6 +104,8 @@ int main() {
         //New part for printing message to screen
         display_init();             //initialize display
         display_clear();            //clear screen
+        char message[20];
+        char message1[20];
         acc_setup();
         // initialize variables to store the acceleration, magnetometer, and temperature data
         short accels[3]; // accelerations for the 3 axes
@@ -111,21 +113,24 @@ int main() {
         short temp;
         
 	while (1) {
-        
-        
             //To read the values from the chip, call:
             // read the accelerometer from all three axes
             // the accelerometer and the pic32 are both little endian by default (the lowest address has the LSB)
             // the accelerations are 16-bit twos compliment numbers, the same as a short
             acc_read_register(OUT_X_L_A, (unsigned char *) accels, 6);
-            
+            sprintf(message1, "accel x: %d", accels[0]);     //~ takes the two's compliment
+            display_ascii(message1, 10, 10);
             // need to read all 6 bytes in one transaction to get an update.
             acc_read_register(OUT_X_L_M, (unsigned char *) mags, 6);
 
             // read the temperature data. Its a right justified 12 bit two's compliment number
             acc_read_register(TEMP_OUT_L, (unsigned char *) &temp, 2);
-
-
+            
+//            display_init();             //initialize display
+//            display_clear();            //clear screen
+            
+//            sprintf(message,"x : %d,y : %d,z : %d",accels[0],accels[1],accels[2]);
+//            display_ascii(message, 5, 5);      //writes message to screen
             // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
             //Use the core timer to double check your CPU clock settings
             _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock
@@ -144,6 +149,7 @@ int main() {
                 else {
                     LATBINV = 0x0080;
                 }
+            
             }
         }
 }

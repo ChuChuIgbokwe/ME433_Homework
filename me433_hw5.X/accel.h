@@ -16,7 +16,6 @@
 #define CTRL5 0x24      // control register 5
 #define CTRL7 0x26      // control register 7
 
-
 #define OUT_X_L_A 0x28  // LSB of x axis acceleration register.
                         // all acceleration registers are contiguous, and this is the lowest address
 #define OUT_X_L_M 0x08  // LSB of x axis of magnetometer register

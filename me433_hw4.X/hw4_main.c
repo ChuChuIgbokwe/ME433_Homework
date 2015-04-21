@@ -74,12 +74,12 @@ int main() {
 
     // set up LED1 pin as a digital output
 	RPB7Rbits.RPB7R = 0b0001;
-        TRISBbits.TRISB7 = 0;
+    TRISBbits.TRISB7 = 0;
 	LATBbits.LATB7 = 1;
 
     // set up LED2 as OC1 using Timer2 at 1kHz
-        ANSELBbits.ANSB15 = 0; // 0 for digital
-        RPB15Rbits.RPB15R = 0b0101; //set B15 as output compare 1
+    ANSELBbits.ANSB15 = 0; // 0 for digital
+    RPB15Rbits.RPB15R = 0b0101; //set B15 as output compare 1
 
 //    __builtin_disable_interrupts();
 	T2CONbits.TCKPS = 0;     // Timer2 prescaler N=1 (1:4)
@@ -90,28 +90,28 @@ int main() {
 	T2CONbits.ON = 1;        // turn on Timer2
 	OC1CONbits.ON = 1;       // turn on OC1
 
-        OC1RS = 0;
-        OC1R = 0;
+    OC1RS = 0;
+    OC1R = 0;
 
     // set up A0 as AN0
-        ANSELAbits.ANSA0 = 1;
-        AD1CON3bits.ADCS = 3;
-        AD1CHSbits.CH0SA = 0;
-        AD1CON1bits.ADON = 1;
+    ANSELAbits.ANSA0 = 1;
+    AD1CON3bits.ADCS = 3;
+    AD1CHSbits.CH0SA = 0;
+    AD1CON1bits.ADON = 1;
 
-        //New part for printing message to screen
-        display_init();             //initialize display
-        display_clear();            //clear screen
-        char message[20];
-        int num = 1337;
-        sprintf(message,"Hello robin %d!",num);
-        display_ascii(message, 15, 30);      //writes message to screen
+    //New part for printing message to screen
+    display_init();             //initialize display
+    display_clear();            //clear screen
+    char message[20];
+    int num = 1337;
+    sprintf(message,"Hello robin %d!",num);
+    display_ascii(message, 15, 30);      //writes message to screen
 
 	while (1) {
-            // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
-            //Use the core timer to double check your CPU clock settings
-            _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock
-            LATBINV = 0x0080; // invert a pin
+        // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output
+        //Use the core timer to double check your CPU clock settings
+        _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock
+        LATBINV = 0x0080; // invert a pin
 
             // wait for half a second, setting LED brightness to pot angle while waiting
             while (_CP0_GET_COUNT() < 10000000) {
@@ -145,4 +145,3 @@ int readADC(void) {
     a = ADC1BUF0;
     return a;
 }
-

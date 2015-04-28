@@ -58,9 +58,15 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stddef.h>
 #include <stdlib.h>
 #include "system_config.h"
-#include "system_definitions.h"
-#include "mouse.h"
-#include "/home/chu-chu/MPLABXProjects/me433_hw5.X/accel.h"
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Constants
+// *****************************************************************************
+// *****************************************************************************
+
+/* Modify this value to alter the LED blink rate */
+#define APP_LED_BLINK_DELAY     (SYS_CLK_FREQ / 100)
 
 // *****************************************************************************
 // *****************************************************************************
@@ -81,17 +87,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 typedef enum
 {
-	/* Application's state machine's initial state. */
-	APP_STATE_INIT=0,
+    /* Increment the counter */
+    APP_STATE_COUNT,
 
-	/* Application waits for configuration in this state */
-    APP_STATE_WAIT_FOR_CONFIGURATION,
-
-    /* Application runs mouse emulation in this state */
-    APP_STATE_MOUSE_EMULATE,
-
-    /* Application error state */
-    APP_STATE_ERROR
+    /* Toggle the LED */
+    APP_STATE_BLINK_LED
 
 } APP_STATES;
 
@@ -114,56 +114,8 @@ typedef struct
     /* The application's current state */
     APP_STATES state;
 
-    /* device layer handle returned by device layer open function */
-    USB_DEVICE_HANDLE  deviceHandle;
+    /* TODO: Define any additional data used by the application. */
 
-    /* Is device configured */
-    bool isConfigured;
-
-    /* If true, then mouse is emulated */
-    bool emulateMouse;
-
-    /* Switch state variables*/
-    bool ignoreSwitchPress;
-
-    /* Tracks switch press*/
-    bool isSwitchPressed;
-
-    /* Mouse x coordinate*/
-    MOUSE_COORDINATE xCoordinate;
-
-    /* Mouse y coordinate*/
-    MOUSE_COORDINATE yCoordinate;
-
-    /* Mouse buttons*/
-    MOUSE_BUTTON_STATE mouseButton[MOUSE_BUTTON_NUMBERS];
-
-    /* HID instance associated with this app object*/
-    SYS_MODULE_INDEX hidInstance;
-
-    /* Transfer handle */
-    USB_DEVICE_HID_TRANSFER_HANDLE reportTransferHandle;
-
-    /* Device Layer System Module Object */
-    SYS_MODULE_OBJ deviceLayerObject;
-
-    /* USB HID active Protocol */
-    uint8_t activeProtocol;
-
-    /* USB HID current Idle */
-    uint8_t idleRate;
-
-    /* Tracks the progress of the report send */
-    bool isMouseReportSendBusy;
-
-    /* Flag determines SOF event has occured */
-    bool sofEventHasOccurred;
-
-    /* Switch debounce timer */
-    unsigned int switchDebounceTimer;
-
-    /* SET IDLE timer */
-    uint16_t setIdleTimer;
 
 } APP_DATA;
 
@@ -188,12 +140,12 @@ typedef struct
     void APP_Initialize ( void )
 
   Summary:
-     MPLAB Harmony application initialization routine.
+     MPLAB Harmony Demo application initialization routine
 
   Description:
-    This function initializes the Harmony application.  It places the 
-    application in its initial state and prepares it to run so that its 
-    APP_Tasks function can be called.
+    This routine initializes Harmony Demo application.  This function opens
+    the necessary drivers, initializes the timer and registers the application
+    callback with the USART driver.
 
   Precondition:
     All other system initialization routines should be called before calling

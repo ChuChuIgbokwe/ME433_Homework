@@ -154,16 +154,16 @@ int main() {
             // read the temperature data. Its a right justified 12 bit two's compliment number
             acc_read_register(TEMP_OUT_L, (unsigned char *) &temp, 2);
             
-//            display_init();             //initialize display
-//            display_clear();            //clear screen
+            display_init();             //initialize display
+            display_clear();            //clear screen
             
-//            sprintf(message,"x : %d,y : %d,z : %d",accels[0],accels[1],accels[2]);
-//            display_ascii(message, 5, 5);      //writes message to screen
-//            display_clear();
+            sprintf(message,"y : %d",accels[1]);
+            display_ascii(message, 5, 5);      //writes message to screen
+            display_clear();
             
 //             display_arrow(accels[0], accels[1]);        // display_arrow will draw line on screen
 //             display_clear();
-            accel_draw_axis(accels[0], accels[1]);
+//            accel_draw_axis(accels[0], accels[1]);
             
             }
         }

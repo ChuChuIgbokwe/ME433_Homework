@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Hello_world</string>
+
+    <string name="hello_world">One fine day in the middle of the night\n Two dead men got up to fight\n
+    back to back they faced each other\n drew their swords and shot each other </string>
+    <string name="action_settings">Settings</string>
+</resources>

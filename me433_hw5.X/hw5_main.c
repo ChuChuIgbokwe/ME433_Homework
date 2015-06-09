@@ -76,12 +76,12 @@ int main() {
 
     // set up LED1 pin as a digital output
 	RPB7Rbits.RPB7R = 0b0001;
-        TRISBbits.TRISB7 = 0;
+    TRISBbits.TRISB7 = 0;
 	LATBbits.LATB7 = 1;
 
     // set up LED2 as OC1 using Timer2 at 1kHz
-        ANSELBbits.ANSB15 = 0; // 0 for digital
-        RPB15Rbits.RPB15R = 0b0101; //set B15 as output compare 1
+    ANSELBbits.ANSB15 = 0; // 0 for digital
+    RPB15Rbits.RPB15R = 0b0101; //set B15 as output compare 1
 
 //    __builtin_disable_interrupts();
 	T2CONbits.TCKPS = 0;     // Timer2 prescaler N=1 (1:4)
@@ -154,12 +154,11 @@ int main() {
             // read the temperature data. Its a right justified 12 bit two's compliment number
             acc_read_register(TEMP_OUT_L, (unsigned char *) &temp, 2);
             
-            display_init();             //initialize display
             display_clear();            //clear screen
             
             sprintf(message,"y : %d",accels[1]);
             display_ascii(message, 5, 5);      //writes message to screen
-            display_clear();
+            
             
 //             display_arrow(accels[0], accels[1]);        // display_arrow will draw line on screen
 //             display_clear();

@@ -1,14 +1,13 @@
-
 #ifdef WIN32
 #include <windows.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "hidapi.h"
 
 #define MAX_STR 255
-#define maxvalue 32767
-#define samples 500
+#define DATA_POINTS 100
 
 int main(int argc, char* argv[])
 {
@@ -16,13 +15,6 @@ int main(int argc, char* argv[])
 	unsigned char buf[65];
 	wchar_t wstr[MAX_STR];
 	hid_device *handle;
-	int i;
-
-	unsigned char message[65];
-	signed short accel[samples][3];
-	signed short xaccel[100];
-	signed short yaccel[100];
-	signed short zaccel[100];
 
 	// Initialize the hidapi library
 	res = hid_init();
@@ -47,28 +39,39 @@ int main(int argc, char* argv[])
 	res = hid_get_indexed_string(handle, 1, wstr, MAX_STR);
 	wprintf(L"Indexed String 1: %s\n", wstr);
 
-	// Toggle LED (cmd 0x80). The first byte is the report number (0x0).
-	buf[0] = 0x0;
-	buf[1] = 0x80;
-	res = hid_write(handle, buf, 65);
+	wprintf(L"Enter row and message (ex: 5Hello!)");
+	scanf("%s", &buf[1]);
+	buf[0] = 0x80;
+	res = hid_write(handle,buf,65);
 
-	// Request state (cmd 0x81). The first byte is the report number (0x0).
-	buf[0] = 0x0;
-	buf[1] = 0x81;
-	
-	//Get user input with scanf("%s", message); where message is a character array.
-	printf("%s", "Please enter row number: ");
-	scanf("%d", &buf[2]);
-	printf("%s", "Please enter string: ");
-	scanf("%s", &buf[3]);
-	res = hid_write(handle, buf, 65);
+	int accel_count = 0;
+	short x_accel[DATA_POINTS];
+	short y_accel[DATA_POINTS];
+	short z_accel[DATA_POINTS];
+	while (accel_count < DATA_POINTS) 
+	{
+		buf[0] = 0x81;
+		res = hid_write(handle,buf,65);
+		res = hid_read(handle,buf,65);
 
-	// Read requested state
-	res = hid_read(handle, buf, 65);
+		if (buf[1] == 0)
+		{
+			x_accel[accel_count] = (( (short) buf[3]) << 8) + (short) buf[2];
+			y_accel[accel_count] = (( (short) buf[5]) << 8) + (short) buf[4];
+			z_accel[accel_count] = (( (short) buf[7]) << 8) + (short) buf[6];
+			for (int i = 0; i < 4; i++)
+				wprintf(L"x accel: %d\n",x_accel[accel_count]);
+			accel_count++;
+		}
+	}
 
-	// Print out the returned buffer.
-	for (i = 0; i < 4; i++)
-		printf("buf[%d]: %d\n", i, buf[i]);
+	FILE *ofp;
+	ofp = fopen("accels.txt","w");
+	fprintf(ofp,"x accel:     y_accel:     z_accel:\r\n");
+	for (int i=0; i<DATA_POINTS; i++) {
+		fprintf(ofp,"%d %d %d\r\n",x_accel[i],y_accel[i],z_accel[i]);
+	}
+	fclose(ofp);
 
 	// Finalize the hidapi library
 	res = hid_exit();
